@@ -27,7 +27,7 @@ console.log("Exo 2 : "+ factorielle(5));
 console.log("3 - Fibonacci");
 //Les nombres de la suite de Fibonacci, noté Fn ou F(n) sont égaux à la somme des deux termes précédents.
 function fibonacci(n) {
-    debugger;
+    //debugger;
     if (n < 2) {
         //console.log(n); // série de 1 et de 0
         return n;
@@ -35,6 +35,9 @@ function fibonacci(n) {
     return fibonacci(n - 1) + fibonacci(n - 2)
 }
 console.log("Exo 3 : "+ fibonacci(9));
+// explications :
+// n = 9, tant que n = 9, il passe directement au second return partie 1 fibonacci(n - 1)
+// si n passe à < 2, il passe directement au second return partie 2 soit fibonacci(n - 2)
 
 
 console.log("4 - Conjecture de Syracuse");
@@ -54,9 +57,8 @@ console.log("U+1 est égal à "+ syracuse(160));
 // 160 = 80
 */
 
-
-// il faut calculer le résultat du U(i), le stocker dans une variable puis vérifier si paire/impaire
 // Écrivez une fonction récursive qui retourne la valeur U(i) - le calcul se fait pour les U(n)
+// il faut calculer le résultat du U(i), le stocker dans une variable puis vérifier si paire/impaire
 // function syracuseR(i){
 //     const N = 15; // base de 15
 //     //debugger;
@@ -109,6 +111,26 @@ function pgcd(a, b){
 }
 console.log("Le PGCD pour b = 0 est : "+ pgcd(1800, 0));
 console.log("Le PGCD pour b /= 0 est : "+ pgcd(1800, 1960));
+
+
+//fibonacci avec itération
+function iterationF(n) {
+    debugger;
+    if(n < 2) {
+        return n;
+    }
+    let x = 0;
+    let y = 1;
+    let z;
+    for (let i = 1; i < n; i++){
+        z = y + x;
+        x = y;
+        y = z;
+    }
+    return z;
+}
+
+console.log(iterationF(6))
 
 
 
