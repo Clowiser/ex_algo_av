@@ -115,7 +115,7 @@ console.log("Le PGCD pour b /= 0 est : "+ pgcd(1800, 1960));
 
 //fibonacci avec itération
 function iterationF(n) {
-    debugger;
+    //debugger;
     if(n < 2) {
         return n;
     }
