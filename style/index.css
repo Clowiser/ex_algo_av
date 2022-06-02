@@ -1,3 +1,7 @@
+:root{
+    --mazeSize: 5;
+}
+
 .wrapper {
     display: grid;
     grid-template-columns: repeat(3, 50px);
@@ -13,6 +17,5 @@
 .case {
     background-color: white;
     border: 1px solid red;
-
 }
 
