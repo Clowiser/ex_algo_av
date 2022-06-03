@@ -65,7 +65,7 @@ const browse = (start) => {
         let node = wrapper.children[i];
         console.log(node);
 
-        stack.push(mazes["3"]["ex-0"][i]);
+        stack.push(node);
         console.log(stack)
 
         //tant que la stack n'est pas vide, on pop
@@ -80,16 +80,6 @@ const browse = (start) => {
 
         if (visited) {
             visited = true;
-        }
-
-        if (case_voisine_is_empty === !visited) {
-
-        }
-
-        //si cul de sac retourner en arrière => sauf 1 grain de riz
-        //donc faire devenir le déplacement avec un grain de riz à true
-        if (case_voisine_is_not_empty) {
-
         }
 
         // const cellDiv = wrapper.children[i];
