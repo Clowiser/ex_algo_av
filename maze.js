@@ -1,127 +1,172 @@
-console.log(mazes);
-let mazeLength = mazes["3"]["ex-0"].length;
-
+//console.log(mazes);
 let wrapper = document.getElementById('wrapper');
-// affichage sur le html grâce getElementByID
+let maze;
 
-const maze = (width, way) => {
-    //debugger;
+const displayMaze = (width, way) => {
 
     const root = document.documentElement;
     root.style.setProperty('--maze-width', width);
     root.style.setProperty('--maze-ex', way);
-    // let maze = mazes[width][way]
 
-    for (let i = 0; i < mazeLength; i++) {
-        let newCase = document.createElement("div");
+    let entrance;
+    maze = mazes[width][way]
+
+    for (let i = 0; i < maze.length; i++) {
+        const cases = maze[i];
+        let div = document.createElement("div");
         // création de la/les div
-        //newCase.setAttribute("id", "0"); - pour attribuer un id
-        newCase.classList.add('case');
-        // ajout du css sur la class case par rapport à la div déclaré newCase
-        wrapper.appendChild(newCase);
+        div.classList.add('case');
+        // ajout du css sur la class case par rapport à la div déclaré div
+        div.setAttribute('id', '' + i);
+        // ajout d'un id dont la valeur itère
+        wrapper.appendChild(div);
         // ajoute le nombre de noeuds (ici les div) créé par rapport à la taille du labyrinthe à l'élément wrapper
 
-        let mazeWall = mazes["3"]["ex-0"][i].walls.length;
-        let start = mazes["3"]["ex-0"][i].entrance;
-        let end = mazes["3"]["ex-0"][i].exit;
-
-        for (let j = 0; j < mazeWall; j++) {
-            if (start === true) {
-                newCase.style.background = "orange";
-            }
-            if (mazes["3"]["ex-0"][i].walls[0] === true) {
-                newCase.style.borderTop = "1px solid red";
-            }
-            if (mazes["3"]["ex-0"][i].walls[1] === true) {
-                newCase.style.borderRight = "1px solid red";
-            }
-            if (mazes["3"]["ex-0"][i].walls[2] === true) {
-                newCase.style.borderBottom = "1px solid red"
-            }
-            if (mazes["3"]["ex-0"][i].walls[3] === true) {
-                newCase.style.borderLeft = "1px solid red";
-            }
-            if (end === true) {
-                newCase.style.background = "green";
-            }
+        if (cases.entrance === true) {
+            div.style.background = "orange"
+            entrance = cases;
         }
+        if (cases.walls[0] === true) {
+            div.style.borderTop = "1px solid red";
+        }
+        if (cases.walls[1] === true) {
+            div.style.borderRight = "1px solid red";
+        }
+        if (cases.walls[2] === true) {
+            div.style.borderBottom = "1px solid red"
+        }
+        if (cases.walls[3] === true) {
+            div.style.borderLeft = "1px solid red";
+        }
+        if (cases.exit === true) {
+            div.style.background = "green";
+        }
+        cases.div = div;
     }
+    browse(maze, entrance);
+}
+
+//sélection labyrinthe
+let selectMaze = document.getElementById("maze-select");
+
+//Parcours de mazes + mettre la valeur d'un maze dans une option
+// for in :  permet d'itérer sur les propriétés énumérables d'un objet qui ne sont pas des symboles.
+// Pour chaque propriété obtenue, on exécute une instruction (ou plusieurs grâce à un bloc d'instructions).
+for (let m in mazes) {
+    let option = document.createElement("option");
+    option.textContent = m;
+    // textContent représente le contenu textuel d'un nœud et de ses descendants.
+    option.value = m;
+    // = renvoie donc toutes les valeurs contenues dans chaque object.maze de mazes
+    selectMaze.appendChild(option);
+    // ajoute le nombre d'option créé par rapport à la taille du mazes dans la balise du selectMaze
 }
 
 
-let visited = false;
-let case_voisine_is_empty = false;
-let case_voisine_is_not_empty = true;
-let stack = [];
-let voisin = false;
+//action à la sélection du labyrinthe
+selectMaze.addEventListener('change', function () {
+    size = selectMaze.value;
+    displayMaze(size, way);
+})
+
+//sélection parcours
+let selectPath = document.getElementById("path-select");
+
+//action à la sélection du chemin
+selectMaze.addEventListener('change', function () {
+    way = selectPath.value;
+    displayMaze(size, way);
+})
 
 
 //parcourir le labyrinthe + laisser un grain de riz (mettre true) quand visite
-const browse = (start) => {
+const browse = (maze, entrance) => {
+    //debugger;
+    let stack = [];
+    // 1 - stack = tableau vide
+    let advance = 0;
+    // afficher des chiffres sur la plateau pour indiquer le chemin pris
 
-    for (let i = 0; i < mazeLength; i++) {
-        start = mazes["3"]["ex-0"][i].entrance;
+    stack.push(entrance);
+    // 2 - insert l'entrée dans la stack
 
-        let node = wrapper.children[i];
-        console.log(node);
+    while (stack.length !== 0) {
+        let v = stack.pop();
+        //tant que la stack n'est pas vide (soit = 0), on pop (retire)
+        //console.log(v);
 
-        stack.push(node);
-        console.log(stack)
-
-        //tant que la stack n'est pas vide, on pop
-        while (!stack) {
-            stack.pop();
+        if (v.visited !== true) {
+            //if v was not visited
+            v.visited = true;
+            //mark v as visited
+            v.div.innerHTML = "" + advance++;
+            v.div.style.background = "gray";
         }
 
-        // si l'un des murs = false => avance de ce côté
-        if (mazes["3"]["ex-0"][i].walls[0] || mazes["3"]["ex-0"][i].walls[1] || mazes["3"]["ex-0"][i].walls[2] || mazes["3"]["ex-0"][i].walls[3] === false) {
-            voisin = true;
+        if (v.exit === true) {
+            //if v is the exit :
+            return console.log("Exit !");
+            //return alert("Bravo ! Vous êtes sorti !");
         }
 
-        if (visited) {
-            visited = true;
+        for (const w of getNeighbours(v)) {
+            //Pour tous les voisins w de v
+            //console.log(w);
+            if (w.visited !== true) {
+                //if w was not visited :
+                stack.push(w);
+                //insert w in the stack (pushe-le)
+            }
         }
-
-        // const cellDiv = wrapper.children[i];
-        // cellDiv.innerHTML = i;
     }
 }
 
-//personnage
-function displayChar() {
-    let wrapper = document.getElementById('wrapper');
-    let char = document.createElement("div");
-    char.classList.add('character');
-    wrapper.appendChild(char);
+
+function getNeighbours(cases) {
+    const neighbours = [];
+
+    if (cases.walls[0] !== true) {
+        neighbours.push(getTop(cases))
+    }
+    if (cases.walls[1] !== true) {
+        neighbours.push(getRight(cases))
+    }
+    if (cases.walls[2] !== true) {
+        neighbours.push(getBottom(cases))
+    }
+    if (cases.walls[3] !== true) {
+        neighbours.push(getLeft(cases))
+    }
+
+    return neighbours;
 }
 
-//
-// function displayRiz() {
-//     let wrapper = document.getElementById('wrapper');
-//     let riz = document.createElement("div");
-//     riz.classList.add('riz');
-//     wrapper.appendChild(riz);
-// }
 
+function getTop(cases) {
+    let x = cases.posX - 1;
+    let y = cases.posY;
 
-maze();
-browse();
+    return maze[x * size + y];
+}
 
+function getRight(cases) {
+    let x = cases.posX;
+    let y = cases.posY + 1;
 
-// IDEES
-// for (let i = 0; i < mazeLength; i++) {
-// const cellDiv = wrapper.children[i];
-// cellDiv.innerHTML = i;
-// }
+    return maze[x * size + y];
+}
 
-// if (mazes["3"]["ex-0"][i].walls[0] || mazes["3"]["ex-0"][i].walls[1] || mazes["3"]["ex-0"][i].walls[2] || mazes["3"]["ex-0"][i].walls[3] === false) {
-//
-// }
-//
-// if (cellDiv === wrapper.children[0]) {
-//     console.log("Case de départ")
-// }
+function getBottom(cases) {
+    let x = cases.posX + 1;
+    let y = cases.posY;
 
+    return maze[x * size + y];
+}
 
+function getLeft(cases) {
+    let x = cases.posX;
+    let y = cases.posY - 1;
 
+    return maze[x * size + y];
+}
 

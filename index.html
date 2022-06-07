@@ -1,21 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <link href="./style/index.css" rel="stylesheet">
 
     <title>Algo Avancé - Labyrinthe</title>
 </head>
+
 <body>
 <h1>Le Labyrinthe</h1>
+
+<div class="inputSelectMazes">
+    <label for="maze-select">Sélectionner un labyrinthe :</label>
+    <select name="mazes" id="maze-select">
+        <option value=""></option>
+    </select>
+
+    <br>
+
+    <label for="path-select">Sélectionner un parcours :</label>
+    <select name="mazes" id="path-select">
+        <option value="ex-0">0</option>
+        <option value="ex-1">1</option>
+        <option value="ex-2">2</option>
+    </select>
+
+</div>
+<br>
+
 <div class="container">
-
     <div class="wrapper" id="wrapper"></div>
-
 </div>
 
 <script src="./data/labyrinthes.js"></script>
 <script src="maze.js"></script>
 
 </body>
+
 </html>

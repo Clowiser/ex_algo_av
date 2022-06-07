@@ -5,34 +5,14 @@
 
 .wrapper {
     display: grid;
-    grid-template-columns: repeat(3, 50px);
+    grid-template-columns: repeat(var(--maze-width), 50px);
     grid-auto-rows: minmax(50px, auto);
+    background-color: white;
+    color: white;
 }
 
 .container {
     width: 250px;
     height: 250px;
-    border: 2px solid black;
-}
-
-.case {
-    background-color: white;
-}
-
-.character {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: black;
-    position: absolute;
-    margin: 20px;
-}
-
-.riz {
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: yellow;
-    position: absolute;
 }
 
