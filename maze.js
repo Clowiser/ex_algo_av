@@ -1,11 +1,13 @@
 //console.log(mazes);
 let wrapper = document.getElementById('wrapper');
+const root = document.documentElement;
 let maze;
 
 const displayMaze = (width, way) => {
+    wrapper.innerHTML = "";
+    //magie!
+
     //Partie en relation avec le html et le css
-    //debugger;
-    const root = document.documentElement;
     //documentElement : renvoie l'élément racine du document (par exemple, l'élément <html> pour les documents HTML)
     root.style.setProperty('--maze-width', width);
     root.style.setProperty('--maze-ex', way);
@@ -51,10 +53,13 @@ const displayMaze = (width, way) => {
         // définir les cases
     }
     browse(maze, entrance);
-    // appel de la fonction
+    // appel de la fonction qui parcout le labyrinthe
 }
 
 //SELECTION - DONNEES DYNAMIQUES
+let size;
+let way;
+
 //sélection labyrinthe
 let selectMaze = document.getElementById("maze-select");
 
@@ -71,26 +76,21 @@ for (let m in mazes) {
     // ajoute le nombre d'option créé par rapport à la taille du mazes dans la balise du selectMaze
 }
 
-let size;
-let way;
-
 //action à la sélection du labyrinthe
 selectMaze.addEventListener('change', function () {
     size = selectMaze.value;
     displayMaze(size, way);
+    console.log(size, way);
 })
 
 //sélection parcours
 let selectPath = document.getElementById("path-select");
 
 //action à la sélection du chemin
-selectMaze.addEventListener('change', function () {
+selectPath.addEventListener('change', function () {
     way = selectPath.value;
     displayMaze(size, way);
 })
-
-// au nouveau onchange, supprimer l'ancien labyrinthe et afficher le nouveau
-document.getElementById("suppression").reset();
 
 
 //parcourir le labyrinthe + laisser un grain de riz (mettre true) quand visiter
@@ -140,7 +140,6 @@ const browse = (maze, entrance) => {
     }
 }
 
-
 function getNeighbours(cases) {
     const neighbours = [];
 
@@ -188,4 +187,6 @@ function getLeft(cases) {
 
     return maze[x * size + y];
 }
+
+
 

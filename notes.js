@@ -60,5 +60,11 @@ function displayChar() {
 //}
 
 
+function deleteMaze() {
+    if (size && way) {
+        document.getElementById("suppression").reset(size, way);
+    }
+}
+
 
 
