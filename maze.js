@@ -3,10 +3,12 @@ let wrapper = document.getElementById('wrapper');
 let maze;
 
 const displayMaze = (width, way) => {
-
-    const root = document.documentElement;
-    root.style.setProperty('--maze-width', width);
-    root.style.setProperty('--maze-ex', way);
+    //Partie en relation avec le html et le css
+    const html = document.documentElement;
+    //renvoie l'élément racine du document (par exemple, l'élément <html> pour les documents HTML)
+    html.style.setProperty('--maze-width', width);
+    html.style.setProperty('--maze-ex', way);
+    //méthode définit une nouvelle valeur pour une propriété sur un objet de déclaration de style CSS - setProperty(propertyName, value)
 
     let entrance;
     maze = mazes[width][way]
@@ -46,6 +48,7 @@ const displayMaze = (width, way) => {
     browse(maze, entrance);
 }
 
+//SELECTION - DONNEES DYNAMIQUES
 //sélection labyrinthe
 let selectMaze = document.getElementById("maze-select");
 
