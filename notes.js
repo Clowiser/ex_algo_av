@@ -67,4 +67,37 @@ function deleteMaze() {
 }
 
 
+const browseBack = (maze, exit) => {
+
+    let stackReturn = [];
+    let advanceReturn = 0;
+
+    stackReturn.push(exit);
+
+    while (stackReturn.length !== 0) {
+        let v = stackReturn.pop();
+
+        if (v.visited !== true) {
+            v.visited = true;
+            v.div.innerHTML = "" + advanceReturn++;
+            if (v.entrance !== true && v.exit !== true) {
+                v.div.style.background = "blue";
+                v.div.style.color = "black";
+            }
+        }
+
+        if (v.entrance === true) {
+            return console.log("You back !");
+        }
+
+        for (const w of getNeighbours(v)) {
+            if (w.visited !== true) {
+                stackReturn.push(w);
+
+            }
+        }
+    }
+}
+
+
 

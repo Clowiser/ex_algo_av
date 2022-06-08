@@ -14,6 +14,7 @@ const displayMaze = (width, way) => {
     //méthode définit une nouvelle valeur pour une propriété sur un objet de déclaration de style CSS - setProperty(propertyName, value)
 
     let entrance;
+    let exit;
     maze = mazes[width][way]
 
     for (let i = 0; i < maze.length; i++) {
@@ -47,13 +48,14 @@ const displayMaze = (width, way) => {
             div.style.borderLeft = "1px solid red";
         }
         if (cases.exit === true) {
-            div.style.background = "green";
+            div.style.background = "green"
+            exit = cases;
         }
         cases.div = div;
         // définir les cases
     }
-    browse(maze, entrance);
-    // appel de la fonction qui parcout le labyrinthe
+    console.log(browse(maze, entrance));
+    // appel de la fonction qui parcourt le labyrinthe depuis l'entrée
 }
 
 //SELECTION - DONNEES DYNAMIQUES
@@ -64,7 +66,7 @@ let way;
 let selectMaze = document.getElementById("maze-select");
 
 //Parcours de mazes + mettre la valeur d'un maze dans une option
-// for in :  permet d'itérer sur les propriétés énumérables d'un objet qui ne sont pas des symboles.
+// for in : permet d'itérer sur les propriétés énumérables d'un objet qui ne sont pas des symboles.
 // Pour chaque propriété obtenue, on exécute une instruction (ou plusieurs grâce à un bloc d'instructions).
 for (let m in mazes) {
     let option = document.createElement("option");
@@ -80,7 +82,6 @@ for (let m in mazes) {
 selectMaze.addEventListener('change', function () {
     size = selectMaze.value;
     displayMaze(size, way);
-    console.log(size, way);
 })
 
 //sélection parcours
@@ -113,30 +114,44 @@ const browse = (maze, entrance) => {
         //console.log(v);
 
         if (v.visited !== true) {
-            //if v was not visited
+            //console.log(v);
+            // si v was not visited
             v.visited = true;
-            //mark v as visited
+            // marqué v comme visited
             v.div.innerHTML = "" + advance++;
+            // itération de notation
             if (v.entrance !== true && v.exit !== true) {
                 v.div.style.background = "gray";
             }
-        }
-
-        if (v.exit === true) {
-            //if v is the exit :
-            return console.log("Exit !");
-            //return alert("Bravo ! Vous êtes sorti !");
+            // background color pour entrance & exit ne change pas
         }
 
         for (const w of getNeighbours(v)) {
             //Pour tous les voisins w de v
-            //console.log(w);
             if (w.visited !== true) {
                 //if w was not visited :
+                w.parent = v;
+                //Tag v as the parent of w
                 stack.push(w);
                 //insert w in the stack (pushe-le)
             }
         }
+
+        //console.log(stack.reverse());
+
+        if (v.exit === true) {
+            //if v is the exit :
+            let path = [];
+            while (v.parent) {
+                //définit un tab vide dans lequel on va pusher le chemin
+                v = v.parent;
+                path.push(v);
+                //push dans path
+                //return console.log("Exit !");
+            }
+            return path.reverse();
+        }
+        
     }
 }
 
