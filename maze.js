@@ -124,7 +124,7 @@ const browse = (maze, entrance) => {
             if (v.entrance !== true && v.exit !== true) {
                 v.div.style.background = "gray";
             }
-            // background color pour entrance & exit ne change pas
+            // background color = gris sauf pour entrance & exit ne change pas
         }
 
         for (const w of getNeighbours(v)) {
@@ -132,42 +132,48 @@ const browse = (maze, entrance) => {
             if (w.visited !== true) {
                 //if w was not visited :
                 w.parent = v;
-                //Tag v as the parent of w
+                //Tag v as the parent of w : tag la PA comme parent des voisins de la PA
                 stack.push(w);
                 //insert w in the stack (pushe-le)
             }
         }
 
-        //console.log(stack.reverse());
-
         if (v.exit === true) {
             //if v is the exit :
             let path = [];
+            //définit un tab vide dans lequel on va pusher le chemin
             while (v.parent) {
-                //définit un tab vide dans lequel on va pusher le chemin
+                //tant que v.parent = sorte de chemin de exit à l'entrée (car l'entrée n'a pas de parent, c'est le papi)
+                //La propriété Window.parent est une référence au parent de la fenêtre ou du cadre embarqué (subframe).
                 v = v.parent;
+                // redéclare que v (soit position actuelle) = à ce chemin de exit à l'entrée
                 path.push(v);
-                //push dans path
-                //return console.log("Exit !");
+                //push dans path chacune des PA
             }
             return path.reverse();
+            //retourne le tableau à l'envers
         }
-
     }
 }
 
-function getNeighbours(cases) {
+//méthode qui correspond aux voisins
+const getNeighbours = (cases) => {
     const neighbours = [];
+    //déclaration d'un tab vide
 
+    //top
     if (cases.walls[0] !== true) {
         neighbours.push(getTop(cases))
     }
+    //right
     if (cases.walls[1] !== true) {
         neighbours.push(getRight(cases))
     }
+    //bottom
     if (cases.walls[2] !== true) {
         neighbours.push(getBottom(cases))
     }
+    //left
     if (cases.walls[3] !== true) {
         neighbours.push(getLeft(cases))
     }
@@ -175,43 +181,48 @@ function getNeighbours(cases) {
     return neighbours;
 }
 
-
-function getTop(cases) {
+//ensemble des méthodes pour le plateau en 2D : posY et posX
+//placement des cases
+//retourne le placement de la case X (+/-1) * la taille du tab + placement de la case Y (-/+1)
+const getTop = (cases) => {
     let x = cases.posX - 1;
     let y = cases.posY;
-
     return maze[x * size + y];
 }
 
-function getRight(cases) {
+const getRight = (cases) => {
     let x = cases.posX;
     let y = cases.posY + 1;
-
     return maze[x * size + y];
 }
 
-function getBottom(cases) {
+const getBottom = (cases) => {
     let x = cases.posX + 1;
     let y = cases.posY;
-
     return maze[x * size + y];
 }
 
-function getLeft(cases) {
+const getLeft = (cases) => {
     let x = cases.posX;
     let y = cases.posY - 1;
-
     return maze[x * size + y];
 }
 
-
+//Méthode récursive (fait appel à elle-même)
 const recursiveMaze = (entrance, advance = 0) => {
+    debugger;
+    //on définit avec les paramètres de l'entrée (case de départ) / advance est optionnelle, c'est pour afficher la numérotation
     let v = entrance;
+    //on déclare (au départ) v comme entrée (elle va s'itérer par la suite)
     if (v.visited !== true) {
+        //si v = Position actuelle
         v.visited = true;
+        // devient true
         v.div.innerHTML = "" + advance;
+        //affichage des chiffres
 
         if (v.exit === true) {
+            //si sortie atteinte (vu qu'elle sera égale à true)
             return [v];
         }
 
@@ -221,6 +232,7 @@ const recursiveMaze = (entrance, advance = 0) => {
                 if (v.entrance !== true && v.exit !== true) {
                     v.div.style.background = "gray";
                 }
+                //c'est la CONCATENATION qui fait tout!!
                 return path.concat(v)
             }
         }
