@@ -54,8 +54,9 @@ const displayMaze = (width, way) => {
         cases.div = div;
         // définir les cases
     }
-    console.log(browse(maze, entrance));
+    //console.log(browse(maze, entrance));
     // appel de la fonction qui parcourt le labyrinthe depuis l'entrée
+    console.log(recursiveMaze(entrance).reverse());
 }
 
 //SELECTION - DONNEES DYNAMIQUES
@@ -151,7 +152,7 @@ const browse = (maze, entrance) => {
             }
             return path.reverse();
         }
-        
+
     }
 }
 
@@ -204,4 +205,25 @@ function getLeft(cases) {
 }
 
 
+const recursiveMaze = (entrance, advance = 0) => {
+    let v = entrance;
+    if (v.visited !== true) {
+        v.visited = true;
+        v.div.innerHTML = "" + advance;
 
+        if (v.exit === true) {
+            return [v];
+        }
+
+        for (const w of getNeighbours(v)) {
+            let path = recursiveMaze(w, advance + 1)
+            if (path) {
+                if (v.entrance !== true && v.exit !== true) {
+                    v.div.style.background = "gray";
+                }
+                return path.concat(v)
+            }
+        }
+    }
+
+}
