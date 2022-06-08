@@ -4,10 +4,11 @@ let maze;
 
 const displayMaze = (width, way) => {
     //Partie en relation avec le html et le css
-    const html = document.documentElement;
-    //renvoie l'élément racine du document (par exemple, l'élément <html> pour les documents HTML)
-    html.style.setProperty('--maze-width', width);
-    html.style.setProperty('--maze-ex', way);
+    //debugger;
+    const root = document.documentElement;
+    //documentElement : renvoie l'élément racine du document (par exemple, l'élément <html> pour les documents HTML)
+    root.style.setProperty('--maze-width', width);
+    root.style.setProperty('--maze-ex', way);
     //méthode définit une nouvelle valeur pour une propriété sur un objet de déclaration de style CSS - setProperty(propertyName, value)
 
     let entrance;
@@ -15,18 +16,21 @@ const displayMaze = (width, way) => {
 
     for (let i = 0; i < maze.length; i++) {
         const cases = maze[i];
+        //console.log(maze[i]); // affiche l'ensemble du plateau
         let div = document.createElement("div");
         // création de la/les div
         div.classList.add('case');
         // ajout du css sur la class case par rapport à la div déclaré div
         div.setAttribute('id', '' + i);
-        // ajout d'un id dont la valeur itère
+        // ajout d'un id dont la valeur itère (c'est ça que je cherchais l'autre fois bordel!)
         wrapper.appendChild(div);
         // ajoute le nombre de noeuds (ici les div) créé par rapport à la taille du labyrinthe à l'élément wrapper
 
+        //Cases et Mur du labyrinthe : afficher les bordures/couleurs si = true
         if (cases.entrance === true) {
-            div.style.background = "orange"
+            div.style.background = "orange";
             entrance = cases;
+            // définit le départ
         }
         if (cases.walls[0] === true) {
             div.style.borderTop = "1px solid red";
@@ -44,8 +48,10 @@ const displayMaze = (width, way) => {
             div.style.background = "green";
         }
         cases.div = div;
+        // définir les cases
     }
     browse(maze, entrance);
+    // appel de la fonction
 }
 
 //SELECTION - DONNEES DYNAMIQUES
@@ -65,6 +71,8 @@ for (let m in mazes) {
     // ajoute le nombre d'option créé par rapport à la taille du mazes dans la balise du selectMaze
 }
 
+let size;
+let way;
 
 //action à la sélection du labyrinthe
 selectMaze.addEventListener('change', function () {
@@ -81,21 +89,27 @@ selectMaze.addEventListener('change', function () {
     displayMaze(size, way);
 })
 
+// au nouveau onchange, supprimer l'ancien labyrinthe et afficher le nouveau
+document.getElementById("suppression").reset();
 
-//parcourir le labyrinthe + laisser un grain de riz (mettre true) quand visite
+
+//parcourir le labyrinthe + laisser un grain de riz (mettre true) quand visiter
 const browse = (maze, entrance) => {
+    //prend en paramètre le Labyrinthe + l'entrée
     //debugger;
     let stack = [];
-    // 1 - stack = tableau vide
+    // déclaration d'un tableau vide dans lequel on mettra le chemin réalisé
     let advance = 0;
-    // afficher des chiffres sur la plateau pour indiquer le chemin pris
+    // déclaration d'une variable représentant l'avancée en affichant des chiffres sur la plateau (grâce à v.div.innerHTML = "" + advance++)
 
     stack.push(entrance);
-    // 2 - insert l'entrée dans la stack
+    // insert l'entrée dans le tableau vide, on commence avec elle
 
     while (stack.length !== 0) {
+        // tant que la longueur du tableau n'est pas vide...
         let v = stack.pop();
-        //tant que la stack n'est pas vide (soit = 0), on pop (retire)
+        //... déclaration de v (qui est la position actuelle), on supprime
+        // pop() supprime le dernier élément d'un tableau et retourne cet élément.
         //console.log(v);
 
         if (v.visited !== true) {
@@ -103,7 +117,9 @@ const browse = (maze, entrance) => {
             v.visited = true;
             //mark v as visited
             v.div.innerHTML = "" + advance++;
-            v.div.style.background = "gray";
+            if (v.entrance !== true && v.exit !== true) {
+                v.div.style.background = "gray";
+            }
         }
 
         if (v.exit === true) {
