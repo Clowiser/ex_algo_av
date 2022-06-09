@@ -3,14 +3,16 @@ console.log("Algo Avancé");
 //Utiliser le debugger via le code debugger, à placer en haut du bloc de code de la méthode
 
 console.log("2 - Factorielle");
+
 //Écrivez une fonction récursive qui retourne la factorielle d’un nombre n, passé en paramètre - faire une fonction qui retourne 1 quand n vaut 1
 function retourneUn(n) {
     if (n === 1) {
         return 1;
     }
- return n;
+    return n;
 }
-console.log("Exo 1 : " + retourneUn( 1));
+
+console.log("Exo 1 : " + retourneUn(1));
 
 //Quand n est plus grand que 1, retourner la multiplication de n, par le résultat de factorielle n-1
 function factorielle(n) {
@@ -21,10 +23,12 @@ function factorielle(n) {
     }
     return n;
 }
-console.log("Exo 2 : "+ factorielle(5));
+
+console.log("Exo 2 : " + factorielle(5));
 
 
 console.log("3 - Fibonacci");
+
 //Les nombres de la suite de Fibonacci, noté Fn ou F(n) sont égaux à la somme des deux termes précédents.
 function fibonacci(n) {
     //debugger;
@@ -34,7 +38,8 @@ function fibonacci(n) {
     }
     return fibonacci(n - 1) + fibonacci(n - 2)
 }
-console.log("Exo 3 : "+ fibonacci(9));
+
+console.log("Exo 3 : " + fibonacci(9));
 // explications :
 // n = 9, tant que n = 9, il passe directement au second return partie 1 fibonacci(n - 1)
 // si n passe à < 2, il passe directement au second return partie 2 soit fibonacci(n - 2)
@@ -66,6 +71,7 @@ console.log("U+1 est égal à "+ syracuse(160));
 //         return N;
 //     }
 //         let resultat = syracuseR(i-1);
+// appel de la fonction elle-même en diminuant i de 1
 //
 //         if (resultat % 2 === 0) {
 //             //console.log("paire")
@@ -78,12 +84,12 @@ console.log("U+1 est égal à "+ syracuse(160));
 // console.log("U+1 est égal à "+ syracuseR(17));
 
 // Supprimez la globale et passez N en paramètre de la fonction U
-function syracuseR(N, i){
+function syracuseR(N, i) {
     //debugger;
-    if(i === 0) {
+    if (i === 0) {
         return N;
     }
-    let resultat = syracuseR(N,i-1);
+    let resultat = syracuseR(N, i - 1);
 
     if (resultat % 2 === 0) {
         //console.log("paire")
@@ -93,7 +99,8 @@ function syracuseR(N, i){
         return (resultat * 3) + 1;
     }
 }
-console.log("U+1 est égal à "+ syracuseR(15,17));
+
+console.log("U+1 est égal à " + syracuseR(15, 17));
 
 
 console.log("5 - PGCD");
@@ -101,28 +108,29 @@ console.log("5 - PGCD");
 // pgcd(a, 0) = a et donc b = 0
 // pgcd(a, b) = pgcd(b, r) avec r = a mod b, si b ≠ 0
 
-function pgcd(a, b){
-    if(b === 0){
+function pgcd(a, b) {
+    if (b === 0) {
         return a; // dans la méthode, si le b = 0 retourne-moi a
     } else { // sinon si b /= 0
         let r = a % b; // stocke dans r = a modulo b (reste de la division entière)
         return pgcd(b, r);
     }
 }
-console.log("Le PGCD pour b = 0 est : "+ pgcd(1800, 0));
-console.log("Le PGCD pour b /= 0 est : "+ pgcd(1800, 1960));
+
+console.log("Le PGCD pour b = 0 est : " + pgcd(1800, 0));
+console.log("Le PGCD pour b /= 0 est : " + pgcd(1800, 1960));
 
 
 //fibonacci avec itération
 function iterationF(n) {
     //debugger;
-    if(n < 2) {
+    if (n < 2) {
         return n;
     }
     let x = 0;
     let y = 1;
     let z;
-    for (let i = 1; i < n; i++){
+    for (let i = 1; i < n; i++) {
         z = y + x;
         x = y;
         y = z;

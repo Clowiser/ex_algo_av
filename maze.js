@@ -54,9 +54,14 @@ const displayMaze = (width, way) => {
         cases.div = div;
         // définir les cases
     }
+    //DFS ITERATIF
     //console.log(browse(maze, entrance));
-    // appel de la fonction qui parcourt le labyrinthe depuis l'entrée
-    console.log(recursiveMaze(entrance).reverse());
+
+    //DFS RECURSIF
+    //console.log(recursiveMaze(entrance).reverse());
+
+    //BFS ITERATIF
+    console.log(bfs(entrance));
 }
 
 //SELECTION - DONNEES DYNAMIQUES
@@ -210,32 +215,91 @@ const getLeft = (cases) => {
 
 //Méthode récursive (fait appel à elle-même)
 const recursiveMaze = (entrance, advance = 0) => {
-    debugger;
+    //debugger;
     //on définit avec les paramètres de l'entrée (case de départ) / advance est optionnelle, c'est pour afficher la numérotation
     let v = entrance;
     //on déclare (au départ) v comme entrée (elle va s'itérer par la suite)
+    //console.log(v);
+    // c'est la position actuelle qui va changer à chaque apppel de la méthode via la concaténation
     if (v.visited !== true) {
-        //si v = Position actuelle
+        //si v = Position actuelle est différent de true
         v.visited = true;
         // devient true
         v.div.innerHTML = "" + advance;
         //affichage des chiffres
 
+        if (v.entrance !== true && v.exit !== true) {
+            v.div.style.background = "gray";
+        }
+
         if (v.exit === true) {
             //si sortie atteinte (vu qu'elle sera égale à true)
+            //tant qu'elle n'est pas atteinte, elle n'est pas égale à true
             return [v];
         }
 
         for (const w of getNeighbours(v)) {
+            //pour tous les voisins w de v
+            // l'instruction for...of permet de créer une boucle Array qui parcourt un objet itérable et qui permet d'exécuter une ou plusieurs instructions pour la valeur de chaque propriété.
             let path = recursiveMaze(w, advance + 1)
+            // exécution de la méthode récursive, s'appelant elle-même, qui prend en paramètre w (qui correspond aux voisins) + itération par rapport aux chiffres
+            // déclaration de la méthode à path
+
+            /* [ex : en partant du départ, v = entrance (x:0, y:0) et w (son voisin) sera donc = (x:0, y:1) ou (x:1, y:0) en fonction de la position de son voisin
+            puis, w deviendra v entrance */
+
             if (path) {
-                if (v.entrance !== true && v.exit !== true) {
-                    v.div.style.background = "gray";
-                }
-                //c'est la CONCATENATION qui fait tout!!
+                //si la méthode est true
+                v.div.style.background = "pink";
+                // change la couleur en gris sauf pour entrance et exit
                 return path.concat(v)
+                // fin for : retour de la méthode qui concatène (ajoute)
+                // c'est la CONCATENATION qui fait l'avancement à chaque tout et qui fait que v prend + 1 et donc permet l'avancement
             }
         }
     }
 
 }
+
+const bfs = (entrance, advance = 0) => {
+    let Q = [];
+
+    Q.push(entrance);
+
+    while (Q.length !== 0) {
+
+        while (Q !== true) {
+            let v = Q.shift();
+            //shift() permet de retirer le premier élément d'un tableau et de renvoyer cet élément.
+
+            if (v.visited !== true) {
+                v.visited = true;
+                v.div.innerHTML = "" + advance++;
+
+                if (v.entrance !== true && v.exit !== true) {
+                    v.div.style.background = "black";
+                    //case qu'il a visité
+                }
+            }
+
+            if (v.exit === true) {
+                let path = [];
+                while (v.parent) {
+                    v = v.parent;
+                    path.push(v);
+                    v.div.style.background = "pink";
+                }
+
+                return path.reverse();
+            }
+
+            for (const w of getNeighbours(v)) {
+                if (w.visited !== true) {
+                    w.parent = v;
+                    Q.push(w);
+                }
+            }
+        }
+    }
+}
+
